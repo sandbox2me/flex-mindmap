@@ -1,0 +1,49 @@
+S.No,InterfaceName,Source,Target,pgroup,process,Integration Pattern,Factory
+1,Agreement Search ,NICE,EPIC,Insurance Servicing,Agreement Search ,NICE->TIB->EPIC,DIP
+2,Claim History,NICE,CIMS,Insurance Servicing,Claim Info,NICE->TIB->CIMS,DIP
+3,Dealer Auth,NICE,EPIC,Insurance Servicing,Dealer Auth,NICE->TIB->EPIC,DIP
+4,Submit Claim,NICE,CIMS,Insurance Servicing,Claim Info,NICE->TIB->CIMS,DIP
+5,Customer ANI Lookup,Salesforce,Interactive Voice Response System (IVR),Finance Servicing,Account Info,NICE<->MuleGW<->MicroService(API)<->SF,DIP
+6,Account Search ,Salesforce,Interactive Voice Response System (IVR),Finance Servicing,Account Info,NICE<->MuleGW<->MicroService(API)<->SF,DIP
+7,Account Lookup,Salesforce,Interactive Voice Response System (IVR),Finance Servicing,Account Info,NICE<->MuleGW<->MicroService(API)<->SF,DIP
+8,Successful authentication SysEvent ,Salesforce,Interactive Voice Response System (IVR),Finance Servicing,Customer Auth,"NICE->MuleGW->MicroService(API)->DataLake(API)
+                                                                ->IR",DIP
+9,Comm Pref update activity,Salesforce,Interactive Voice Response System (IVR),Finance Servicing,Update Account,"NICE->MuleGW->MicroService(API)->UCM
+                                                                ->SF
+(Regression Testing required roundtrip by UCM and downstreams)",DIP
+10,Account Info – Get  Schedule  Payment Info ,Salesforce,Interactive Voice Response System (IVR),Finance Servicing,Account Info,"NICE->MuleGW->Pymt Agg API->CITI, WU, IVR, Agent Portal ",DIP
+11,Account Info-Payment Info Self service activity ,NICE CXOne,Salesforce,Finance Servicing,Account Info,NICE<->MuleGW<->MicroService(API)<->SF,DIP
+12,Account Info – Contract Info Self Service activity,NICE CXOne,Salesforce,Finance Servicing,Account Info,NICE<->MuleGW<->MicroService(API)<->SF,DIP
+13,Account Info – Account Status Self Service activity,NICE CXOne,Salesforce,Finance Servicing,Account Info,NICE<->MuleGW<->MicroService(API)<->SF,DIP
+14,PayOff Info – Self Service activity ,NICE CXOne,Salesforce,Finance Servicing,Payment,NICE<->MuleGW<->MicroService(API)<->SF,DIP
+15,Update Account – Address change activity ,NICE CXOne,Salesforce,Finance Servicing,Update Account,"                                  
+NICE->MuleGW->Microservice(API)->SFMC(SMS)->SF
+                                                                -->SF (Activity)",DIP
+16,Update Account – Phone Number change activity ,NICE CXOne,Salesforce,Finance Servicing,Update Account,"NICE->MuleGW->MicroService(API)->UCM (Contact Update)
+                                                                ->SF (Activity)
+(Regression Testing required roundtrip by UCM and downstreams)",DIP
+17,Update Account – Due date change activity,NICE CXOne,Salesforce,Finance Servicing,Update Account,"                                  
+NICE->MuleGW->Microservice(API)->SFMC(SMS)->SF
+                                                                -->SF (Activity)",DIP
+18,Get Docs – Billing Statement Case (ICC-1254),NICE CXOne,Salesforce,Finance Servicing,Payment,NICE->APIGW->SF -> IR -> FOCUS HOST   ( should go to DataLake instead of IR  / possible new microservice if changes to TIBCO) FUTURE DISCUSSION,DIP
+19,Get Docs  - Account History case (ICC-1255),NICE CXOne,Salesforce,Finance Servicing,Account Info,NICE->APIGW->SF -> IR -> FOCUS HOST  ( should go to DataLake instead of IR  / possible new microservice if changes to TIBCO) FUTURE DISCUSSION,DIP
+20,Successful payment activity,CITI,Salesforce,Finance Servicing,Payment,CITI->APIGW->Microservice->SF,DIP
+21,Payment Failure activity,CITI,Salesforce,Finance Servicing,Payment,CITI->APIGW->Microservice->SF,DIP
+22,Payment Confirmaton text activity,CITI,Salesforce,Finance Servicing,Payment,"Activity, SMS     CITI->APIGW->Microservice->SF /  SFMC (SMS)",DIP
+23,Pre-Auth BRE lookup ,NICE CXOne,AWS RDS,Internal App,BRE,NICE->APIGW->(microservice)->BRE DB (Postgres RDS),DIP
+24,Contact Type determination- BRE Lookup ,NICE CXOne,AWS RDS,Internal App,BRE,NICE->APIGW->(microservice)->BRE DB (Postgres RDS),DIP
+25,Skill Specification lookup,NICE CXOne,AWS RDS,Internal App,BRE,NICE->APIGW->(microservice)->BRE DB (Postgres RDS),DIP
+26,BRE Caching,,,,BRE,TBD-> review performance,DIP
+27,BRE - Outage Management Tool,NICE CXOne,AWS RDS,Internal App,BRE,NEW UI ->APIGW->(microservice)->BRE DB (Postgres RDS),DIP
+28,Submit Payment,NICE CXOne,CITI,Finance Servicing,Payment,CITI / WU (Mostly CITI) (DEPENDS ON OTHER CITI INTEGRATION),DIP
+29,Payment History,NICE CXOne,CITI,Finance Servicing,Payment,CITI / WU (Mostly CITI) (DEPENDS ON OTHER CITI INTEGRATION),DIP
+31,Proactive XS Integration (Data/Records  Pull),NICE CXOne,Datalake,Collections& Loyalty,Outbound Dialer,NICE-->APIGW-->DataLake,DIP
+32,Proactive XS Integration (Data/Records  Update),NICE CXOne,Datalake,Collections& Loyalty,Outbound Dialer,NICE-->APIGW-->DataLake,DIP
+33,Post Call API (Micro Service),NICE CXOne,Datalake,Collections& Loyalty,Outbound Dialer,NICE-->APIGW-->DataLake,DIP
+35,Salesforce to List Management (Disposition),Salesforce,Datalake,Collections& Loyalty,Outbound Dialer,Salesforce-->APIGW-->DataLake,DIP
+36,Salesforce to NICE Dialer (Disposition),Salesfoerce,NICE Cxone,Collections& Loyalty,Outbound Dialer,Salesforce-->Nice CXOne,DIP
+42,Nice Data Streaming,NICE CXOne,BI,Collections& Loyalty,Outbound Dialer,NICE-->Kafka-->BI,DIP
+43,EIS-196 API - CEP Activity and Cases,NICE CXOne,Salesforce,Finance Servicing,Activity,"                                  
+NICE->MuleGW->Microservice(API)-->SF (Activity/Case)",DIP
+44,EIS-196 API - Marketing Cloud customer SMS,NICE CXOne,SFMC,Finance Servicing,SMS,"                                  
+NICE->MuleGW->Microservice(API)->SFMC(SMS)",DIP
