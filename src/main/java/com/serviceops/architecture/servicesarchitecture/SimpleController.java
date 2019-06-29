@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class SimpleController {
 
 
-    @GetMapping("/test")
+    @GetMapping("/arch-gen")
     public String testpage(Model model) {
 
         return "test";
