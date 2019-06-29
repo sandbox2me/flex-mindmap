@@ -26,9 +26,9 @@ public class ServiceImpl implements ServiceI {
         String whc = "";
 
         if(!StringUtils.isEmpty(group)){
-            whc = " where pgroup = '"+ group +"'";
+            whc = " and pgroup = '"+ group +"'";
 
-            if(!StringUtils.isEmpty(process)){
+            if(!process.equals("0")){
                 whc = whc + " and process = '"+process + "'";
             }
 
@@ -39,12 +39,12 @@ public class ServiceImpl implements ServiceI {
 
 
 
-        String sql = "select distinct SOURCE AS \"id\", SOURCE as \"label\" from TEST" + whc;
+        String sql = "select distinct SOURCE AS \"id\", SOURCE as \"label\" from TEST where Factory='"+factory+"' " + whc;
 
         List<Map<String,Object>> source = jdbcTemplate.queryForList(sql);
 
 
-        sql = "select distinct TARGET AS \"id\", TARGET as \"label\" from TEST" + whc;
+        sql = "select distinct TARGET AS \"id\", TARGET as \"label\" from TEST where Factory='"+factory+"' " + whc;
 
         List<Map<String,Object>> targets = jdbcTemplate.queryForList(sql);
 
@@ -67,9 +67,9 @@ public class ServiceImpl implements ServiceI {
         String whc = "";
 
         if(!StringUtils.isEmpty(group)){
-            whc = " where pgroup = '"+ group +"'";
+            whc = " and pgroup = '"+ group +"'";
 
-            if(!StringUtils.isEmpty(process)){
+            if(!process.equals("0")){
                 whc = whc + " and process = '"+ process + "'";
             }
 
@@ -77,7 +77,7 @@ public class ServiceImpl implements ServiceI {
         }
 
 
-        String sql = "select SOURCE as \"from\", TARGET as \"to\", 'to' as \"arrows\", InterfaceName as \"label\"  from TEST" + whc;
+        String sql = "select SOURCE as \"from\", TARGET as \"to\", 'to' as \"arrows\", InterfaceName as \"label\",CONCAT(Factory,'#',pgroup,'#',process,'#',SOURCE,'#',TARGET,'#',InterfaceName,'#',IntegrationPattern) as \"id\"  from TEST where Factory='"+factory+"' " + whc;
         List<Map<String,Object>> links = jdbcTemplate.queryForList(sql);
         return links;
 
@@ -93,7 +93,7 @@ public class ServiceImpl implements ServiceI {
 
     @Override
     public Response getProcesses(String factory){
-        String sql = "select distinct pgroup from TEST";
+        String sql = "select distinct pgroup from TEST where Factory='"+ factory +"'";
 
         List<Map<String,Object>> pgroups = jdbcTemplate.queryForList(sql);
         List<Map<String,Object>> resp = new ArrayList<Map<String,Object>>();
@@ -102,7 +102,7 @@ public class ServiceImpl implements ServiceI {
             String pgroupname = (String)pgroup.get("pgroup");
             parent.put("name",pgroupname);
 
-            sql = "select distinct process from TEST where pgroup='"+pgroupname+"'";
+            sql = "select distinct process from TEST where Factory='"+ factory +"' and  pgroup='"+pgroupname+"'";
             List<Map<String,Object>> processes = jdbcTemplate.queryForList(sql);
             List<Map<String,Object>> childs = new ArrayList<Map<String,Object>>();
 
@@ -112,7 +112,7 @@ public class ServiceImpl implements ServiceI {
                 String processname = (String)process.get("process");
                 child.put("name", process.get("process"));
 
-                sql = "select count(InterfaceName) from TEST where pgroup = '"+pgroupname+"' and process = '"+processname+"'";
+                sql = "select count(InterfaceName) from TEST where Factory='"+ factory +"' and  pgroup = '"+pgroupname+"' and process = '"+processname+"'";
                 Integer intcount = jdbcTemplate.queryForObject(sql,Integer.class);
                 child.put("size",intcount*800);
 
@@ -180,7 +180,7 @@ public class ServiceImpl implements ServiceI {
             String pgroupname = (String)pgroup.get("pgroup");
             parent.put("name",pgroupname);
 
-            sql = "select distinct process from TEST where pgroup='"+pgroupname+"'";
+            sql = "select distinct process from TEST where Factory='"+ factory +"' and pgroup='"+pgroupname+"'";
             List<Map<String,Object>> processes = jdbcTemplate.queryForList(sql);
             List<Map<String,Object>> childs = new ArrayList<Map<String,Object>>();
 
@@ -190,11 +190,11 @@ public class ServiceImpl implements ServiceI {
                 String processname = (String)process.get("process");
                 child.put("name", process.get("process"));
 
-                sql = "select count(InterfaceName) from TEST where pgroup = '"+pgroupname+"' and process = '"+processname+"'";
+                sql = "select count(InterfaceName) from TEST where Factory='"+ factory +"' and  pgroup = '"+pgroupname+"' and process = '"+processname+"'";
                 Integer intcount = jdbcTemplate.queryForObject(sql,Integer.class);
                 child.put("size",intcount*800);
 
-                sql = "select InterfaceName, Source, Target from TEST where pgroup = '"+pgroupname+"' and process = '"+processname+"'";
+                sql = "select InterfaceName, Source, Target from TEST where Factory='"+ factory +"' and  pgroup = '"+pgroupname+"' and process = '"+processname+"'";
 
                 List<Map<String,Object>> interfacenames = jdbcTemplate.queryForList(sql);
 

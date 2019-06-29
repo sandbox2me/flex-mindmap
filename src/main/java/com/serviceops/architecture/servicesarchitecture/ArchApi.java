@@ -56,7 +56,7 @@ public class ArchApi {
     }
 
     @GetMapping("/getTree")
-    public List<Map<String,Object>> getTree(){
+    public Map<String,Object> getTree(){
 
         List<Response> childs = new ArrayList<Response>();
         Response resp = new Response();
@@ -68,12 +68,9 @@ public class ArchApi {
         resp.children = service.getTree("DIP").children;
         childs.add(resp);
 
-        List<Map<String,Object>> finalresp = new ArrayList<Map<String,Object>>();
-        Map<String,Object> map = new HashMap<String,Object>();
-        map.put("name", "Service Ops");
-        map.put("children", childs);
-        finalresp.add(map);
-
+        Map<String,Object> finalresp = new HashMap<String,Object>();
+        finalresp.put("name","Service Ops");
+        finalresp.put("children",childs);
 
         return finalresp;
     }

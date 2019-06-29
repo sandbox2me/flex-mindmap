@@ -2,27 +2,80 @@
 <meta charset="utf-8">
 <style>
 .node {
-  cursor: pointer;
-}fgj
-.node circle {
-  fill: #fff;
-  stroke: steelblue;
-  stroke-width: 1.5px;
-}
-.node text {
-  font: 10px sans-serif;
-}
+    cursor: pointer;
+  }
+
+  .overlay{
+      background-color:#EEE;
+  }
+
+  .node circle {
+    fill: #fff;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+  }
+
+  .node text {
+    font-size:10px;
+    font-family:sans-serif;
+  }
+
+  .link {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 1.5px;
+  }
+
+  .templink {
+    fill: none;
+    stroke: red;
+    stroke-width: 3px;
+  }
+
+  .ghostCircle.show{
+      display:block;
+  }
+
+  .ghostCircle, .activeDrag .ghostCircle{
+       display: none;
+  }
+
 .link {
   fill: none;
   stroke: #ccc;
-  stroke-width: 1.5px;
+  stroke-width: 3px;
 }
+
+.inline {
+    display: inline-block;
+    vertical-align: top;
+    margin:10px;
+
+    }
 </style>
 <body>
-    <table><tr>
-    <td><div id="tree" style="height: 800px;width: 800px"></div></td>
-    </tr><tr>
-        <td><div id="mynetwork" style="height: 800px;width: 800px"></div></td>
+    <table>
+        <tr>
+            <td><div id="header" style="height: 45px;width: 900px;font-size: 40px;font-weight: bold;">Service Ops Department Architecture</div></td>
+        </tr>
+        <tr>
+            <td><div id="subheader" style="height: 200px;width: 2300px;font-size: 25px;">
+                This interactive application shall let you navigate through all business processes in Service Ops Department. The application uses the <b>interface catalog</b> created as part of the <b>EDC</b>
+                    Initiative. This applications creates an interactive experience to understand the details captured in Interface Catalog.<br/>
+                You start from the root which is Service Ops and drill down to factories of Service Ops. For each factory, you will then drill down to each process group. From each process group you can see the sub
+                    processes. For each sub process you will see the interfaces. Each interface then shall provide the applications that it connects.<br/>
+                If you <b>click on process group</b>, it will show you a logical architecture of that process group. If you <b>click on a sub process</b>, it will show you the logical architecture of that sub process.
+                In the logical architecture, if you <b>click on any interface</b>, it will show the physical integration pattern for that integration.
+                    </div></td>
+        </tr>
+        <tr>
+    <td><div id="tree" style="height: 810px;width: 1500px"></div></td>
+    </tr>
+        <tr>
+            <td><div id="desc" style="height: 40px;width: 1500px;font-size: 20px;font-weight: bold;"></div></td>
+        </tr>
+        <tr>
+        <td><div><div class="inline" id="mynetwork" style="height: 800px;width: 900px"></div><div id="eventSpan" class="inline" style="height: 400px;width: 600px;font-size: 20px;font-weight: bold;"></div></div></td>
         </tr>
     </table> 
     
@@ -31,7 +84,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
 var margin = {top: 20, right: 120, bottom: 20, left: 120},
-    width = 960 - margin.right - margin.left,
+    width = 1500 - margin.right - margin.left,
     height = 800 - margin.top - margin.bottom;
 var i = 0,
     duration = 750,
@@ -134,25 +187,26 @@ function update(source) {
 function click(d) {
     console.log(d.parent.name);
     console.log(d.name);
-    showdata(d.parent.name,d.name);
+    console.log(d.depth);
+    if(d.depth == 2){
+        showdata(d.name,'0',d.parent.name);
+    } else if(d.depth == 3){
+        showdata(d.parent.name,d.name,d.parent.parent.name);
+    }
   if (d.children) {
     d._children = d.children;
     d.children = null;
   } else {
     d.children = d._children;
     d._children = null;
-    
+
   }
   update(d);
 }
-    
-    function showdata(parent,child){
-        if(parent == 'flare'){
-            parent = child;
-            child = '';
-        }
-        
-        $.ajax({url: "http://localhost:8080/getAppLinks/"+parent+"/"+child, success: function(result){
+
+    function showdata(parent,child,factory){
+        $( "#desc" ).html( factory +"->"+parent+(child=='0'?'':"->"+child) +"<br/> Click on each interface to see Integration Pattern");
+        $.ajax({url: "http://localhost:8080/getAppLinks/"+factory+"/"+parent+"/"+child, success: function(result){
             var nodes = new vis.DataSet(result.apps);
 
           // create an array with edges
@@ -187,6 +241,13 @@ function click(d) {
 
             };
           var network = new vis.Network(container, data, options);
+           network.on("click", function (params) {
+                params.event = "[original event]";
+                if(params.edges.length>0)
+                document.getElementById('eventSpan').innerHTML = '<b>Interface Details:</b><br/> Name: ' + params.edges[0].split('#')[5] + '<br/>Integration Pattern: '+ params.edges[0].split('#')[params.edges[0].split('#').length -1];
+
+            });
+
         }});
     }    
             
