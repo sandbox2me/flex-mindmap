@@ -206,7 +206,7 @@ function click(d) {
 
     function showdata(parent,child,factory){
         $( "#desc" ).html( factory +"->"+parent+(child=='0'?'':"->"+child) +"<br/> Click on each interface to see Integration Pattern");
-        $.ajax({url: "http://localhost:8080/getAppLinks/"+factory+"/"+parent+"/"+child, success: function(result){
+        $.ajax({url: "/getAppLinks/"+factory+"/"+parent+"/"+child, success: function(result){
             var nodes = new vis.DataSet(result.apps);
 
           // create an array with edges
