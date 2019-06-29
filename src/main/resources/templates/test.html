@@ -224,18 +224,19 @@ function click(d) {
               font: {
                 size: 12
               },
-              length:800,
-
-              widthConstraint: {
-                maximum: 90
-              }
+              length:300,
             },
             nodes: {
               shape: 'box',
-              margin: 10,
-              widthConstraint: {
-                maximum: 200
-              }
+              margin: 10
+
+            },
+            "physics":{
+                "barnesHut":{
+                    "springConstant": 0,
+                    "avoidOverlap": 0.2
+                }
+
             }
 
 
