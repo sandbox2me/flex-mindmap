@@ -232,30 +232,13 @@ function click(d) {
               margin: 10
 
             },
-           /* "physics":{
+           "physics":{
                 "barnesHut":{
                     "springConstant": 0,
                     "avoidOverlap": 0.2
                 }
 
-            },*/
-            layout: {
-
-
-                hierarchical: {
-                  enabled:true,
-                  levelSeparation: 150,
-                  nodeSpacing: 100,
-                  treeSpacing: 200,
-                  blockShifting: true,
-                  edgeMinimization: true,
-                  parentCentralization: true,
-                  direction: 'UD',        // UD, DU, LR, RL
-                  sortMethod: 'hubsize'   // hubsize, directed
-                }
               }
-
-
             };
           var network = new vis.Network(container, data, options);
            network.on("click", function (params) {
