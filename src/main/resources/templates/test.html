@@ -56,28 +56,13 @@
 <body>
     <table>
         <tr>
-            <td><div id="header" style="height: 45px;width: 100%;font-size: 40px;font-weight: bold;">Service Ops Department Architecture  <a href="#" onclick="javascript:window.open('help.html')">(User Manual)</a></div></td>
+            <td><div id="header" style="height: 45px;width: 100%;font-size: 40px;font-weight: bold;">Flex Lease Mind Map </div></td>
         </tr>
-        <tr>
-            <td><div id="subheader" style="height: 200px;width: 2300px;font-size: 25px;">
 
-                This interactive application shall let you navigate through all business processes in Service Ops Department. The application uses the <b>interface catalog</b> created as part of the <b>EDC</b>
-                    Initiative. This applications creates an interactive experience to understand the details captured in Interface Catalog.<br/>
-                You start from the root which is Service Ops and drill down to factories of Service Ops. For each factory, you will then drill down to each process group. From each process group you can see the sub
-                    processes. For each sub process you will see the interfaces. Each interface then shall provide the applications that it connects.<br/>
-                If you <b>click on process group</b>, it will show you a logical architecture of that process group. If you <b>click on a sub process</b>, it will show you the logical architecture of that sub process.
-                In the logical architecture, if you <b>click on any interface</b>, it will show the physical integration pattern for that integration. <a href="#" onclick="javascript:window.open('help.html')">Help</a>
-                    </div></td>
-        </tr>
         <tr>
     <td><div id="tree" class="inline" style="height: 810px;width: 1500px"></div></div></td>
     </tr>
-        <tr>
-            <td><div id="desc" style="height: 40px;width: 1500px;font-size: 20px;font-weight: bold;"></div></td>
-        </tr>
-        <tr>
-        <td><div><div class="inline" id="mynetwork" style="height: 800px;width: 900px"></div><div id="eventSpan" class="inline" style="height: 400px;width: 600px;font-size: 20px;font-weight: bold;"></div></div></td>
-        </tr>
+
     </table> 
     
     
@@ -190,9 +175,9 @@ function click(d) {
     console.log(d.name);
     console.log(d.depth);
     if(d.depth == 2){
-        showdata(d.name,'0',d.parent.name);
+        //showdata(d.name,'0',d.parent.name);
     } else if(d.depth == 3){
-        showdata(d.parent.name,d.name,d.parent.parent.name);
+        //showdata(d.parent.name,d.name,d.parent.parent.name);
     }
   if (d.children) {
     d._children = d.children;
@@ -206,6 +191,7 @@ function click(d) {
 }
 
     function showdata(parent,child,factory){
+
         $( "#desc" ).html( factory +"->"+parent+(child=='0'?'':"->"+child) +"<br/> Click on each interface to see Integration Pattern");
         $.ajax({url: "/getAppLinks/"+factory+"/"+parent+"/"+child, success: function(result){
             var nodes = new vis.DataSet(result.apps);

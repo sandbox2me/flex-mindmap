@@ -85,7 +85,7 @@ public class ServiceImpl implements ServiceI {
 
     @Override
     public void load(){
-        //jdbcTemplate.execute("drop table TEST");
+       // jdbcTemplate.execute("drop table TEST");
         String sql = "CREATE TABLE TEST AS SELECT * FROM CSVREAD('classpath:test.csv')";
         jdbcTemplate.execute(sql);
     }
@@ -198,6 +198,7 @@ public class ServiceImpl implements ServiceI {
 
                 List<Map<String,Object>> interfacenames = jdbcTemplate.queryForList(sql);
 
+
                 List<Map<String,Object>> ilist = new ArrayList<Map<String,Object>>();
 
                 for(Map<String,Object> interfacename : interfacenames){
@@ -205,21 +206,24 @@ public class ServiceImpl implements ServiceI {
                     String iname = (String)interfacename.get("InterfaceName");
                     String source = (String)interfacename.get("Source");
                     String target = (String)interfacename.get("Target");
-                    idata.put("name",iname);
+                    if(!StringUtils.isEmpty(iname)) {
+                        idata.put("name", iname);
 
-                    List<Map<String,Object>> applist = new ArrayList<Map<String,Object>>();
-                    Map<String,Object> sourcenode = new HashMap<String,Object>();
-                    sourcenode.put("name",source + "(S)");
-                    Map<String,Object> targetnode = new HashMap<String,Object>();
-                    targetnode.put("name",target + "(T)");
+                        List<Map<String, Object>> applist = new ArrayList<Map<String, Object>>();
+                        Map<String, Object> sourcenode = new HashMap<String, Object>();
+                        sourcenode.put("name", source + "(S)");
+                        Map<String, Object> targetnode = new HashMap<String, Object>();
+                        targetnode.put("name", target + "(T)");
 
-                    applist.add(sourcenode);
-                    applist.add(targetnode);
-                    idata.put("children",applist);
-                    ilist.add(idata);
+                        applist.add(sourcenode);
+                        applist.add(targetnode);
+                        idata.put("children", applist);
+                        ilist.add(idata);
+                    }
 
                 }
-                child.put("children",ilist);
+                if(ilist.size() > 0)
+                    child.put("children",ilist);
 
 
 

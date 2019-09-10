@@ -60,12 +60,12 @@ public class ArchApi {
 
         List<Response> childs = new ArrayList<Response>();
         Response resp = new Response();
-        resp.name = "Agent Enablement";
-        resp.children = service.getTree("Agent Enablement").children;
-        childs.add(resp);
+//        resp.name = "Agent Enablement";
+//        resp.children = service.getTree("Agent Enablement").children;
+//        childs.add(resp);
         resp = new Response();
-        resp.name = "DIP";
-        resp.children = service.getTree("DIP").children;
+        resp.name = "FLEX";
+        resp.children = service.getTree("FLEX").children;
         childs.add(resp);
 
         Map<String,Object> finalresp = new HashMap<String,Object>();
