@@ -96,7 +96,7 @@ d3.json("/getTree", function(error, flare) {
       d.children = null;
     }
   }
-  root.children.forEach(collapse);
+  //root.children.forEach(collapse);
   update(root);
 });
 d3.select(self.frameElement).style("height", "800px");
